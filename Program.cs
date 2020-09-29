@@ -13,11 +13,11 @@ namespace DailyWageProblem
             int totalWAage;
             Random rand = new Random();
             int empcheck = rand.Next(0, 3);
-            if (empcheck == 1)
+            if (empcheck == IS_FULL_TIME)
             {
                 empHrs = 8;
             }
-            else if(empcheck==2)
+            else if(empcheck==ISS_PART_TIME)
             {
                 empHrs = 4;
             }
