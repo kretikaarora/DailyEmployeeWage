@@ -8,27 +8,34 @@ namespace DailyWageProblem
         {
             const int IS_FULL_TIME = 1;
             const int ISS_PART_TIME = 2;
-            int EMPLOYEE_RATE_PER_HOUR = 20;
+            const int EMPLOYEE_RATE_PER_HOUR = 20;
+            const int NUM_OF_WORKING_DAYS_PERMONTH = 20;
             int empHrs;
-            int totalWAage;
+            int totalWAage=0;
+            int totalEmpHours = 0;
             Random rand = new Random();
-            int empcheck = rand.Next(0, 3);
-            switch(empcheck)
+            for (int day = 0; day < NUM_OF_WORKING_DAYS_PERMONTH; day++)
             {
-                case IS_FULL_TIME:
-                    empHrs = 8;
-                    break;
-                case ISS_PART_TIME:
-                    empHrs = 4;
-                    break;
-                default:
-                    empHrs = 0;
-                    break;
+                int empcheck = rand.Next(0, 3);
+
+                switch (empcheck)
+                {
+                    case IS_FULL_TIME:
+                        empHrs = 8;
+                        break;
+                    case ISS_PART_TIME:
+                        empHrs = 4;
+                        break;
+                    default:
+                        empHrs = 0;
+                        break;
 
 
+                }
+                totalEmpHours = totalEmpHours+empHrs;
             }
-            totalWAage = empHrs * EMPLOYEE_RATE_PER_HOUR;
-            Console.WriteLine("The total wage of worker per day is {0}", totalWAage);
+            totalWAage = totalEmpHours * EMPLOYEE_RATE_PER_HOUR;
+            Console.WriteLine("The total wage of worker per month is {0}", totalWAage);
 
         }
 
