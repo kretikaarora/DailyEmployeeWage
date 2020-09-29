@@ -1,25 +1,39 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DailyWageProblem
 {
-    class Program
+    class EmployeeWageComputation
     {
         const int IS_FULL_TIME = 1;
         const int ISS_PART_TIME = 2;
-        
-      
-        public static void calculateEmpWage(string companyName,int maxWorkingHours,int maxNumOfWorkingDays,int ratePerHour)
-        { 
-        int empHrs;
-        int totalWAage = 0;
-        int totalEmpHours = 0;
-        int workingDays = 0;
-        Random rand = new Random();
-            while(totalEmpHours < maxWorkingHours && workingDays< maxNumOfWorkingDays )
+        private string companyName;
+        private int maxWorkingHours;
+        private int maxNumOfWorkingDays;
+        private int ratePerHour;
+        private int totalWage = 0;
+
+        public EmployeeWageComputation(string companyName, int maxWorkingHours, int maxNumOfWorkingDays, int ratePerHour)
+        {
+            this.companyName = companyName;
+            this.maxWorkingHours = maxWorkingHours;
+            this.maxNumOfWorkingDays = maxNumOfWorkingDays;
+            this.ratePerHour = ratePerHour;
+
+        }
+
+        public void calculateEmpWage()
+        {
+            int empHrs;
+
+            int totalEmpHours = 0;
+            int workingDays = 0;
+            Random rand = new Random();
+            while (totalEmpHours < maxWorkingHours && workingDays < maxNumOfWorkingDays)
 
             {
 
-            int empcheck = rand.Next(0, 3);
+                int empcheck = rand.Next(0, 3);
 
 
 
@@ -35,28 +49,48 @@ namespace DailyWageProblem
                         empHrs = 0;
                         break;
 
-                       
+
                 }
-totalEmpHours = totalEmpHours + empHrs;
-Console.WriteLine(totalEmpHours);
-Console.WriteLine(workingDays);
-workingDays++;
-            }
-            totalWAage = totalEmpHours * ratePerHour;
-Console.WriteLine("The total wage of worker per month is {0}", totalWAage);
+                totalEmpHours = totalEmpHours + empHrs;
+                Console.WriteLine("the total working days is " + workingDays + "and working hours is " + totalEmpHours);
+
+                workingDays++;
             }
 
+            totalWage = totalEmpHours * ratePerHour;
+            Console.WriteLine("The total wage of worker for" + companyName + "is:" + totalWage);
 
-static void Main(string[] args)
+
+        }
+         public string information()
         {
-            calculateEmpWage("TATA",50,25,15);
-            calculateEmpWage("Amazon", 60, 52, 54);
+            return "Total wage for" + this.companyName + "is:" + this.totalWage;
+        }
+    }
+
+        class Program
+        {
+
+
+            static void Main(string[] args)
+            {
+                EmployeeWageComputation TATA = new EmployeeWageComputation("TATA", 60, 50, 20);
+                EmployeeWageComputation Amazon = new EmployeeWageComputation("Amazon", 40, 70, 50);
+                TATA.calculateEmpWage();
+                Amazon.calculateEmpWage();
+                Console.WriteLine(TATA.information());
+                Console.WriteLine(Amazon.information());
+
+
+            }
+
+
         }
 
             
           
           
           
-        }
+        
     }
 
