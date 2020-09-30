@@ -1,96 +1,117 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics.Tracing;
 
-namespace DailyWageProblem
+namespace EmpWage
+
 {
-    class EmployeeWageComputation
+    public class CompanyEmpWage
     {
-        const int IS_FULL_TIME = 1;
-        const int ISS_PART_TIME = 2;
-        private string companyName;
-        private int maxWorkingHours;
-        private int maxNumOfWorkingDays;
-        private int ratePerHour;
-        private int totalWage = 0;
+        public string company;
+        public int empRatePerHour;
+        public int numofWorkingDays;
+        public int maxHoursPerMonth;
+        public int totalEmpWage;
 
-        public EmployeeWageComputation(string companyName, int maxWorkingHours, int maxNumOfWorkingDays, int ratePerHour)
+        public CompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
-            this.companyName = companyName;
-            this.maxWorkingHours = maxWorkingHours;
-            this.maxNumOfWorkingDays = maxNumOfWorkingDays;
-            this.ratePerHour = ratePerHour;
+            this.company = company;
+            this.empRatePerHour = empRatePerHour;
+            this.numofWorkingDays = numOfWorkingDays;
+            this.maxHoursPerMonth = maxHoursPerMonth;
+
+        }
+        public void setTotalEmpWage(int totalEmpWage)
+        {
+            this.totalEmpWage = totalEmpWage;
+
+        }
+        public string toString()
+        {
+            return "Total Emp Wage for the company : " + this.company + " is " + this.totalEmpWage;
+        }
+
+    }
+
+    public class EmpWageBuilderArray
+    {
+        public const int IS_PART_TIME = 1;
+        public const int IS_FULL_TIME = 2;
+        private int numOfCompany = 0;
+        private CompanyEmpWage[] companyEmpWageArray;
+
+        public EmpWageBuilderArray()
+        {
+            this.companyEmpWageArray = new CompanyEmpWage[5];
+        }
+
+        public void addCompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
+        {
+            companyEmpWageArray[this.numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
+            numOfCompany++;
 
         }
 
-        public void calculateEmpWage()
+        public void computeEmpWage()
         {
-            int empHrs;
-
-            int totalEmpHours = 0;
-            int workingDays = 0;
-            Random rand = new Random();
-            while (totalEmpHours < maxWorkingHours && workingDays < maxNumOfWorkingDays)
-
+            for (int i = 0; i < numOfCompany; i++)
             {
+                companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(this.companyEmpWageArray[i]));
+                Console.WriteLine(this.companyEmpWageArray[i].toString());
 
-                int empcheck = rand.Next(0, 3);
 
-
-
-                switch (empcheck)
+            }
+        }
+        private int computeEmpWage(CompanyEmpWage companyEmpWage)
+        {
+            int empHrs = 0;
+            int totalEmpHrs = 0;
+            int totalWorkingDays = 0;
+            while (totalEmpHrs <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numofWorkingDays)
+            {
+                totalWorkingDays++;
+                Random rand = new Random();
+                int empCheck = rand.Next(0, 3);
+                switch (empCheck)
                 {
+                    case IS_PART_TIME:
+                        empHrs = 4;
+                        break;
                     case IS_FULL_TIME:
                         empHrs = 8;
-                        break;
-                    case ISS_PART_TIME:
-                        empHrs = 4;
                         break;
                     default:
                         empHrs = 0;
                         break;
 
-
                 }
-                totalEmpHours = totalEmpHours + empHrs;
-                Console.WriteLine("the total working days is " + workingDays + "and working hours is " + totalEmpHours);
-
-                workingDays++;
-            }
-
-            totalWage = totalEmpHours * ratePerHour;
-            Console.WriteLine("The total wage of worker for" + companyName + "is:" + totalWage);
-
-
-        }
-         public string information()
-        {
-            return "Total wage for" + this.companyName + "is:" + this.totalWage;
-        }
-    }
-
-        class Program
-        {
-
-
-            static void Main(string[] args)
-            {
-                EmployeeWageComputation TATA = new EmployeeWageComputation("TATA", 60, 50, 20);
-                EmployeeWageComputation Amazon = new EmployeeWageComputation("Amazon", 40, 70, 50);
-                TATA.calculateEmpWage();
-                Amazon.calculateEmpWage();
-                Console.WriteLine(TATA.information());
-                Console.WriteLine(Amazon.information());
-
+                totalEmpHrs += empHrs;
+                Console.WriteLine("Days:" + totalWorkingDays + " Emp Hrs " + empHrs);
 
             }
+            return totalEmpHrs * companyEmpWage.empRatePerHour;
 
 
         }
 
-            
-          
-          
-          
-        
+
+
+
+
+
     }
 
+
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            EmpWageBuilderArray empWageBuilder = new EmpWageBuilderArray();
+            empWageBuilder.addCompanyEmpWage("DMART", 10, 20, 90);
+            empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
+            empWageBuilder.computeEmpWage();
+
+        }
+    }
+}
