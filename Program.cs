@@ -12,6 +12,7 @@ namespace EmpWage
         public int maxHoursPerMonth;
         public int totalEmpWage;
 
+
         public CompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
             this.company = company;
@@ -65,7 +66,8 @@ namespace EmpWage
         {
             int empHrs = 0;
             int totalEmpHrs = 0;
-            int totalWorkingDays = 0;
+            int totalWorkingDays = 0
+            int dailyWage;
             while (totalEmpHrs <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numofWorkingDays)
             {
                 totalWorkingDays++;
@@ -84,8 +86,10 @@ namespace EmpWage
                         break;
 
                 }
+                dailyWage = empHrs * computeEmpWage.empRatePerHour;
+
                 totalEmpHrs += empHrs;
-                Console.WriteLine("Days:" + totalWorkingDays + " Emp Hrs " + empHrs);
+                Console.WriteLine("Days:" + totalWorkingDays + " Emp Hrs " + empHrs + "dailywage: " + dailyWage);
 
             }
             return totalEmpHrs * companyEmpWage.empRatePerHour;
