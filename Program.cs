@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 
 namespace EmpWage
@@ -12,12 +13,14 @@ namespace EmpWage
         public int maxHoursPerMonth;
         public int totalEmpWage;
 
+
         public CompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
             this.company = company;
             this.empRatePerHour = empRatePerHour;
             this.numofWorkingDays = numOfWorkingDays;
             this.maxHoursPerMonth = maxHoursPerMonth;
+            this.totalEmpWage = 0;
 
         }
         public void setTotalEmpWage(int totalEmpWage)
@@ -36,36 +39,44 @@ namespace EmpWage
     {
         public const int IS_PART_TIME = 1;
         public const int IS_FULL_TIME = 2;
-        private int numOfCompany = 0;
-        private CompanyEmpWage[] companyEmpWageArray;
+        private LinkedList<CompanyEmpWage> compEmpWageList;
+
+
+
+
 
         public EmpWageBuilderArray()
         {
-            this.companyEmpWageArray = new CompanyEmpWage[5];
+            this.compEmpWageList = new LinkedList<CompanyEmpWage>();
+
+
         }
 
         public void addCompanyEmpWage(string company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth)
         {
-            companyEmpWageArray[this.numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
-            numOfCompany++;
+            CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
+            this.compEmpWageList.AddLast(companyEmpWage);
+
 
         }
 
         public void computeEmpWage()
         {
-            for (int i = 0; i < numOfCompany; i++)
+            foreach (CompanyEmpWage companyEmpWage in this.compEmpWageList)
             {
-                companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(this.companyEmpWageArray[i]));
-                Console.WriteLine(this.companyEmpWageArray[i].toString());
-
+                companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
+                Console.WriteLine(companyEmpWage.toString());
 
             }
+
         }
+
         private int computeEmpWage(CompanyEmpWage companyEmpWage)
         {
             int empHrs = 0;
             int totalEmpHrs = 0;
             int totalWorkingDays = 0;
+            int dailyWage;
             while (totalEmpHrs <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numofWorkingDays)
             {
                 totalWorkingDays++;
@@ -84,23 +95,16 @@ namespace EmpWage
                         break;
 
                 }
+                dailyWage = empHrs * companyEmpWage.empRatePerHour;
+
                 totalEmpHrs += empHrs;
-                Console.WriteLine("Days:" + totalWorkingDays + " Emp Hrs " + empHrs);
+                Console.WriteLine("Days:" + totalWorkingDays + " Emp Hrs " + empHrs + "dailywage: " + dailyWage);
 
             }
             return totalEmpHrs * companyEmpWage.empRatePerHour;
 
-
         }
-
-
-
-
-
-
     }
-
-
 
 
     class Program
@@ -111,6 +115,7 @@ namespace EmpWage
             empWageBuilder.addCompanyEmpWage("DMART", 10, 20, 90);
             empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
             empWageBuilder.computeEmpWage();
+
 
         }
     }
