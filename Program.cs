@@ -13,20 +13,26 @@ namespace DailyWageProblem
             int totalWAage;
             Random rand = new Random();
             int empcheck = rand.Next(0, 3);
-            if (empcheck == IS_FULL_TIME)
+            switch(empcheck)
             {
-                empHrs = 8;
-            }
-            else if(empcheck==ISS_PART_TIME)
-            {
-                empHrs = 4;
-            }
-            else
-            {
-                empHrs = 0;
+                case IS_FULL_TIME:
+                    empHrs = 8;
+                    break;
+                case ISS_PART_TIME:
+                    empHrs = 4;
+                    break;
+                default:
+                    empHrs = 0;
+                    break;
+
+
             }
             totalWAage = empHrs * EMPLOYEE_RATE_PER_HOUR;
-            Console.WriteLine("The total wage of worker per day is {0}",totalWAage);
+            Console.WriteLine("The total wage of worker per day is {0}", totalWAage);
+
+        }
+
+            
           
           
           
@@ -35,4 +41,4 @@ namespace DailyWageProblem
 
         }
     }
-}
+
